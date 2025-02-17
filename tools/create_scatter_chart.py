@@ -31,16 +31,31 @@ create_scatter_chart_schema = {
                     "items": {"type": "string"},
                     "description": "List of colors for the points.",
                     "nullable": True
+                },
+                "plot_title": {
+                    "type": "string",
+                    "description": "Title of the plot.",
+                    "nullable": True
+                },
+                "x_axis_title": {
+                    "type": "string",
+                    "description": "Title of the x-axis.",
+                    "nullable": True
+                },
+                "y_axis_title": {
+                    "type": "string",
+                    "description": "Title of the y-axis.",
+                    "nullable": True
                 }
             },
-            "required": ["x_column", "y_column", "background_image", "palette"],
+            "required": ["x_column", "y_column", "background_image", "palette", "plot_title", "x_axis_title", "y_axis_title"],
             "additionalProperties": False
         },
         "strict": True
     }
 }
 
-def create_scatter_chart(data, x_column, y_column, background_image=None, palette=None):
+def create_scatter_chart(data, x_column, y_column, background_image=None, palette=None, plot_title=None, x_axis_title=None, y_axis_title=None):
     """
     Create a scatter chart with optional background and color palette.
     
@@ -50,6 +65,9 @@ def create_scatter_chart(data, x_column, y_column, background_image=None, palett
     - y_column: Column name for the y-variable
     - background_image: URL or file path of the background image
     - palette: List of colors for the points
+    - plot_title: Title of the plot
+    - x_axis_title: Title of the x-axis
+    - y_axis_title: Title of the y-axis
     """
     fig = go.Figure()
     
@@ -62,5 +80,12 @@ def create_scatter_chart(data, x_column, y_column, background_image=None, palett
     # Add background image
     if background_image:
         fig.update_layout(images=[dict(source=background_image, x=0, y=1, xref='paper', yref='paper', sizex=1, sizey=1, xanchor='left', yanchor='top', layer='below')])
+    
+    # Set titles
+    fig.update_layout(
+        title=plot_title,
+        xaxis_title=x_axis_title,
+        yaxis_title=y_axis_title
+    )
     
     return fig
